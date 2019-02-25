@@ -7,5 +7,9 @@
       }
     ]
   ],
-  "plugins": ["@babel/plugin-syntax-dynamic-import"]
+  "plugins": ["@babel/plugin-syntax-dynamic-import",
+    "transform-es2015-arrow-functions",
+    "transform-es2015-shorthand-properties",
+    "@babel/plugin-transform-classes"
+  ]
 }

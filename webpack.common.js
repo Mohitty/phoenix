@@ -62,8 +62,7 @@ module.exports = {
   ],
   entry: {
     core: [
-      'core-js/modules/es6.promise',
-      'core-js/modules/es6.array.iterator',
+      '@babel/polyfill',
       './src/phoenix.js',
     ]
   },
@@ -73,12 +72,14 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.js?$/,
-      exclude: [/node_modules/, /apps/],
-      include: [/src/],
-      use: [{
-        loader: 'babel-loader'
-      }]
+      test: /\.js$/,
+      include: [
+        /node_modules\/owncloud-design-system\/dist/,
+        /node_modules\/owncloud-sdk\/dist/,
+        /node_modules\/vuex-persist\/dist\/esm/,
+        /src/
+      ],
+      loader: 'babel-loader'
     }, {
       test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
       include: [/node_modules\/material-design-icons-iconfont\/dist/, /static\/fonts\/ocft\/font/],

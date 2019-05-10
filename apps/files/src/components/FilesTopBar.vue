@@ -46,7 +46,7 @@
     </template>
   </oc-topbar>
   <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
-                    :ocLoading="fileFolderCreationLoading"
+                    :ocLoading="fileFolderCreationLoading" :ocError="newFolderErrorMessage"
                     :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
   <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName"
                     :ocLoading="fileFolderCreationLoading"
@@ -103,6 +103,9 @@ export default {
     url () {
       let path = this.item === '' ? '/' : `${this.item}/`
       return this.$client.files.getFileUrl(`/${path}`)
+    },
+    newFolderErrorMessage () {
+      return this.checkNewFolderName(this.newFolderName)
     },
     headers () {
       return {
@@ -174,6 +177,12 @@ export default {
             this.fileFolderCreationLoading = false
           })
       }
+    },
+    checkNewFolderName (folderName) {
+      if (/[/]/.test(folderName)) {
+        return this.$gettext('Folder name cannot contain "/"')
+      }
+      return null
     },
     addNewFile (fileName) {
       if (fileName !== '') {

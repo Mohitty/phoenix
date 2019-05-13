@@ -1,56 +1,60 @@
 <template>
   <div>
-  <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
-  <oc-topbar variation="secondary" uk-sticky="offset: 60">
-    <template slot="left">
-      <oc-topbar-logo icon="home" @click="navigateTo('files-list', '')"></oc-topbar-logo>
-      <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
-    </template>
-    <template slot="title">
-      <div class="uk-navbar-item">
-        <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
-      </div>
-    </template>
-    <template slot="right">
-      <div class="uk-navbar-item">
-        <div v-show="fileUpload">
-          <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
-          <oc-drop toggle="#oc-progress-pie" mode="click">
-            <oc-upload-menu :items="inProgress" />
-          </oc-drop>
+    <div class="uk-background-muted">
+      <oc-grid flex gutter="small" class="uk-padding-small" style="border-bottom: 1px solid #ccd4e0;">
+        <div class="uk-width-expand">
+          <oc-button icon="home" @click="navigateTo('files-list', '')" class="uk-inline uk-margin-small-right" />
+          <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage" class="uk-flex-inline uk-margin-remove-top" />
         </div>
-
-        <template v-if="this.canUpload">
-          <oc-button id="new-file-menu-btn" variation="primary" type="button">
-            <translate>+ New</translate>
-          </oc-button>
-          <oc-drop toggle="#new-file-menu-btn" mode="click">
-            <oc-nav>
-              <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-              <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
-              <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
-            </oc-nav>
-          </oc-drop>
-        </template>
-        <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
-      </div>
-      <div class="uk-navbar-item">
-        <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
-          %{ activeFiles.length } Result
-        </translate>
-      </div>
-      <div class="uk-navbar-item">
-        <oc-icon name="filter_list" id="oc-filter-list-btn" />
-        <file-filter-menu />
-      </div>
-    </template>
-  </oc-topbar>
-  <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
-                    :ocLoading="fileFolderCreationLoading"
-                    :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
-  <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName"
-                    :ocLoading="fileFolderCreationLoading"
-                    :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+      </oc-grid>
+      <oc-grid flex gutter="small" class="uk-padding-small uk-margin-remove-top">
+        <div class="uk-width-auto">
+          <div v-show="fileUpload">
+            <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
+            <oc-drop toggle="#oc-progress-pie" mode="click">
+              <oc-upload-menu :items="inProgress" />
+            </oc-drop>
+          </div>
+          <div v-if="this.canUpload" class="uk-inline uk-margin-right">
+            <oc-button id="new-file-menu-btn" variation="primary" type="button">
+              <translate>+ New</translate>
+            </oc-button>
+            <oc-drop toggle="#new-file-menu-btn" mode="click">
+              <oc-nav>
+                <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+                <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
+                <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
+              </oc-nav>
+            </oc-drop>
+          </div>
+          <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
+          <translate class="uk-flex-middle uk-margin-right" :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
+            %{ activeFiles.length } Result
+          </translate>
+        </div>
+        <div class="uk-width-expand">
+          <div class="uk-width-1-4">
+            <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
+          </div>
+        </div>
+        <div class="uk-width-auto">
+          <div class="uk-button-group">
+            <oc-button icon="share" />
+            <oc-button icon="file_download" />
+            <oc-button icon="info" />
+            <oc-button icon="filter_list" id="oc-filter-list-btn" />
+          </div>
+          <file-filter-menu />
+        </div>
+      </oc-grid>
+    </div>
+    <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
+    <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
+                      :ocLoading="fileFolderCreationLoading"
+                      :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName"
+                      :ocLoading="fileFolderCreationLoading"
+                      :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
 </template>
 

@@ -9,7 +9,7 @@
         <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
         <oc-table-cell shrink type="head"><translate>Size</translate></oc-table-cell>
         <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@s" v-translate>Modification Time</oc-table-cell>
-        <oc-table-cell shrink type="head" v-translate>Actions</oc-table-cell>
+        <!-- <oc-table-cell shrink type="head" v-translate>Actions</oc-table-cell> -->
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
@@ -31,11 +31,11 @@
         <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@s">
           {{ formDateFromNow(item.mdate) }}
         </oc-table-cell>
-        <oc-table-cell>
+        <!-- <oc-table-cell>
           <div class="uk-button-group uk-margin-small-right">
             <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
           </div>
-        </oc-table-cell>
+        </oc-table-cell> -->
       </oc-table-row>
     </oc-table-group>
     <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName" ocConfirmId="oc-rename-dialog-ok"

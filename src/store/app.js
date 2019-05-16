@@ -1,5 +1,3 @@
-'use strict'
-
 import { remove } from 'lodash'
 
 const state = {

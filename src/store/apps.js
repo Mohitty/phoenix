@@ -1,5 +1,3 @@
-'use strict'
-
 import { forEach, map } from 'lodash'
 
 const state = {

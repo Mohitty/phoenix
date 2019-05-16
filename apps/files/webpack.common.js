@@ -1,5 +1,6 @@
 const integratePhoenix = require('../../webpack-phoenix-integration')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const path = require('path');
 
 module.exports = integratePhoenix({
   plugins: [
@@ -7,8 +8,6 @@ module.exports = integratePhoenix({
   ],
   entry: {
     files: [
-      'core-js/modules/es6.promise',
-      'core-js/modules/es6.array.iterator',
       './src/default.js'
     ]
   },
@@ -18,11 +17,18 @@ module.exports = integratePhoenix({
     filename: 'files.bundle.js',
   },
   module: {
-    rules: [{
-      test: /\.js?$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader'
-    }, {
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: "babel-loader"
+        },
+        include: [
+          path.resolve('src'),
+          path.resolve('node_modules/vue2-dropzone/dist/')
+        ]
+      },
+      {
       enforce: 'pre',
       test: /\.(js|vue)$/,
       exclude: /node_modules/,

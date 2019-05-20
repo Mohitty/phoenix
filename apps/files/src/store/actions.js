@@ -320,5 +320,8 @@ export default {
   },
   dragOver (context, value) {
     context.commit('DRAG_OVER', value)
+  },
+  toggleSidebar (context, value) {
+    context.commit('TOGGLE_SIDEBAR', value)
   }
 }

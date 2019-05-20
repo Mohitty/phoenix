@@ -25,5 +25,6 @@ export default {
   shares: [],
   sharesError: null,
   sharesLoading: false,
-  loadingFolder: false
+  loadingFolder: false,
+  sidebarOpened: true
 }

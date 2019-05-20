@@ -67,5 +67,8 @@ export default {
   },
   loadingFolder: state => {
     return state.loadingFolder
+  },
+  sidebarOpened: state => {
+    return state.sidebarOpened
   }
 }

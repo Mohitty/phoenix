@@ -1,6 +1,6 @@
   <template>
     <div class="oc-app" id="files-app" @dragover="$_ocApp_dragOver">
-      <oc-app-layout :rightHidden="selectedFiles.length === 0">
+      <oc-app-layout :rightHidden="sidebarOpened === false">
         <template slot="center">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
@@ -153,7 +153,7 @@ export default {
 
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm', 'dropzone', 'loadingFolder']),
+    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm', 'dropzone', 'loadingFolder', 'sidebarOpened']),
     ...mapGetters(['getToken', 'extensions']),
 
     item () {

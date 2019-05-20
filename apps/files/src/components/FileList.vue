@@ -13,9 +13,9 @@
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
-      <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row">
+      <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row" @click="$_ocFileRow_select(item)">
         <oc-table-cell>
-          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
+          <oc-checkbox class="uk-margin-small-left" @click.native.stop="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
         </oc-table-cell>
         <oc-table-cell class="uk-padding-remove">
           <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
@@ -69,6 +69,13 @@ export default {
   methods: {
     ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles', 'renameFile']),
     ...mapActions(['openFile']),
+
+    $_ocFileRow_select (item) {
+      if  (this.selectedFiles.length >= 1) {
+        this.resetFileSelection()
+      }
+      this.addFileSelection(item)
+    },
 
     toggleAll () {
       if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {

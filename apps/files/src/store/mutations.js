@@ -118,5 +118,8 @@ export default {
   },
   UPDATE_FOLDER_LOADING (state, value) {
     state.loadingFolder = value
+  },
+  TOGGLE_SIDEBAR (state, value) {
+    state.sidebarOpened = value
   }
 }

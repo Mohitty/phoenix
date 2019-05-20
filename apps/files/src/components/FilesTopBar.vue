@@ -3,18 +3,13 @@
     <div class="uk-background-muted">
       <oc-grid flex gutter="small" class="uk-padding-small" style="border-bottom: 1px solid #ccd4e0;">
         <div class="uk-width-expand">
-          <oc-button icon="home" @click="navigateTo('files-list', '')" class="uk-inline uk-margin-small-right" />
+          <oc-button icon="home" @click="navigateTo('files-list', '')" />
+          <span v-show="activeRoute.length !== 0" class="uk-margin-right uk-margin-left">/</span>
           <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage" class="uk-flex-inline uk-margin-remove-top" />
         </div>
       </oc-grid>
       <oc-grid flex gutter="small" class="uk-padding-small uk-margin-remove-top">
         <div class="uk-width-auto">
-          <div v-show="fileUpload">
-            <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
-            <oc-drop toggle="#oc-progress-pie" mode="click">
-              <oc-upload-menu :items="inProgress" />
-            </oc-drop>
-          </div>
           <div v-if="this.canUpload" class="uk-inline uk-margin-right">
             <oc-button id="new-file-menu-btn" variation="primary" type="button">
               <translate>+ New</translate>
@@ -32,16 +27,23 @@
             %{ activeFiles.length } Result
           </translate>
         </div>
+        <div v-show="fileUpload">
+            <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
+            <oc-drop toggle="#oc-progress-pie" mode="click">
+              <oc-upload-menu :items="inProgress" />
+            </oc-drop>
+        </div>
         <div class="uk-width-expand">
-          <div class="uk-width-1-4">
-            <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
-          </div>
+          <oc-search-bar @search="onFileSearch" :label="searchLabel" :loading="isLoadingSearch" />
         </div>
         <div class="uk-width-auto">
           <div class="uk-button-group">
-            <oc-button icon="share" />
-            <oc-button icon="file_download" />
-            <oc-button icon="info" />
+            <template v-if="selectedFiles.length >= 1">
+              <oc-button icon="share" />
+              <oc-button icon="file_download" />
+              <oc-button icon="menu" />
+            </template>
+            <oc-button icon="info" @click="$_ocSidebarButton_open" :variation="sidebarOpened === true ? 'primary' : 'default'" />
             <oc-button icon="filter_list" id="oc-filter-list-btn" />
           </div>
           <file-filter-menu />
@@ -90,7 +92,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'selectedFiles', 'sidebarOpened']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -126,8 +128,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder', 'toggleSidebar']),
     ...mapActions(['openFile', 'showNotification']),
+    $_ocSidebarButton_open () {
+      this.toggleSidebar(!this.sidebarOpened)
+    },
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
         this.isLoadingSearch = false
@@ -264,3 +269,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .oc-search {
+    max-width: 600px;
+  }
+</style>
